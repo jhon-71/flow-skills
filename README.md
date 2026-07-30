@@ -5,8 +5,8 @@ disciplined working flow — **chat → todo → do** — plus a small set of **
 that are generic enough to belong nowhere else.
 
 These are **not** business or team skills — they help *any* AI session, in *any* project.
-This repo is **private**: it's the single canonical home for one person's flow, and anyone
-who needs the skills is given repo access rather than a copy (avoids drift).
+This is one person's working flow, kept in one place so it can be improved rather than
+copied around and left to drift. Take it if it fits how you work; ignore it if it doesn't.
 
 ## The flow
 
@@ -61,12 +61,13 @@ Nothing in `install.sh` writes this for you — it's your `CLAUDE.md`, so it's y
 ## Install
 
 ```bash
-git clone git@github.com:jhon-71/flow-skills.git
+git clone https://github.com/jhon-71/flow-skills.git
 cd flow-skills && ./install.sh
 ```
 
-The clone needs access to this private repo. `install.sh` then symlinks every
-`skills/<name>/` into `~/.claude/skills/<name>`. It never destroys a name you already use:
+`install.sh` symlinks every `skills/<name>/` into `~/.claude/skills/<name>` — symlinks
+rather than copies, so a later `git pull` updates every skill in place. It never destroys
+a name you already use:
 a link that already points here is left alone, a link pointing somewhere else is saved as
 `<name>.bak.<timestamp>` before being replaced, and a real directory or file is skipped
 untouched and reported — the script exits non-zero when anything was skipped, so a partial
