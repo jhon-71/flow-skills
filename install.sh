@@ -10,6 +10,10 @@ set -euo pipefail
 
 REPO_DIR="$(cd "$(dirname "$0")" && pwd)"
 TARGET="$HOME/.claude/skills"
+# Backups go OUTSIDE $TARGET on purpose: anything under it that contains a
+# SKILL.md is a loadable skill, so a backup parked there would shadow the very
+# name it was saving — two skills declaring the same name.
+BACKUP="$HOME/.claude/skills-backup"
 STAMP="$(date +%Y%m%d-%H%M%S)"
 mkdir -p "$TARGET"
 
@@ -31,10 +35,15 @@ for dir in "$REPO_DIR"/skills/*/; do
       echo "current : $name — already linked here"
       n_current=$((n_current + 1))
     else
-      mv "$dest" "$dest.bak.$STAMP"
+      mkdir -p "$BACKUP"
+      keep="$BACKUP/$name.$STAMP"
+      # Never clobber an existing backup, even on a same-second re-run.
+      i=1
+      while [ -e "$keep" ]; do keep="$BACKUP/$name.$STAMP.$i"; i=$((i + 1)); done
+      mv "$dest" "$keep"
       ln -s "$src" "$dest"
       echo "backup  : $name — was a link to $current"
-      echo "          saved as $name.bak.$STAMP, then replaced"
+      echo "          moved to $keep, then replaced"
       n_backed=$((n_backed + 1))
     fi
     continue
@@ -65,6 +74,11 @@ if [ "$total" -eq 0 ]; then
 fi
 
 echo "done: $n_linked linked · $n_current already current · $n_backed backed up · $n_skipped skipped"
+
+if [ "$n_backed" -gt 0 ]; then
+  echo "backups live in $BACKUP (outside the skills dir, so they do not load)."
+  echo "To undo one: rm ~/.claude/skills/<name> && mv $BACKUP/<name>.<stamp> ~/.claude/skills/<name>"
+fi
 
 if [ "$n_skipped" -gt 0 ]; then
   echo "$n_skipped skill(s) were NOT installed — see SKIP above."

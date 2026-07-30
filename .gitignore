@@ -1,0 +1,16 @@
+# Saved browser session state — these files hold live cookies/tokens and are
+# bearer-equivalent. webtest writes them; they must never reach a commit.
+.auth/
+*storageState*.json
+
+# Evidence and scratch produced by webtest runs
+screenshots/
+*.png
+*.mjs
+
+# Node harness, if one is ever created inside a clone
+node_modules/
+package-lock.json
+package.json
+
+.DS_Store

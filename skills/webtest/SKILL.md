@@ -147,6 +147,11 @@ window up ~15-20s at the end before closing.
   password step.
 - **No sudo, no `/etc/hosts`** for network faults — CDP does it cleaner and scoped
   to the browser.
+- **Treat saved state as a credential.** `.auth/state.json` (and anything else holding
+  `storageState`) contains live session cookies — it is bearer-equivalent, so whoever
+  reads it is logged in as that user. Keep it in the harness dir, never in a repo, add
+  `.auth/` to `.gitignore` before you create it, and delete it when the run is done.
+  Same care for screenshots: a logged-in page is a screenshot of someone's data.
 - **Clean up:** write temp `.mjs` files in the harness dir only to run them, then
   delete. Don't leave test scripts or screenshot dirs in someone else's project —
   check `git status` is clean afterwards.
