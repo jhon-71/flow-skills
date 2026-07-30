@@ -67,12 +67,14 @@ cd flow-skills && ./install.sh
 
 `install.sh` symlinks every `skills/<name>/` into `~/.claude/skills/<name>` — symlinks
 rather than copies, so a later `git pull` updates every skill in place. It never destroys
-a name you already use:
-a link that already points here is left alone, a link pointing somewhere else is saved as
-`<name>.bak.<timestamp>` before being replaced, and a real directory or file is skipped
-untouched and reported — the script exits non-zero when anything was skipped, so a partial
-install is visible rather than silent. Restart your Claude Code session for new skills to
-register.
+a name you already use: a link that already points here is left alone; a link pointing
+somewhere else is moved to `~/.claude/skills-backup/<name>.<timestamp>` before being
+replaced; a real directory or file is skipped untouched and reported. Backups live
+*outside* `~/.claude/skills` on purpose — anything under that directory containing a
+`SKILL.md` is itself a loadable skill, so a backup parked there would shadow the very name
+it was saving. The script exits non-zero when anything was skipped, so a partial install is
+visible rather than silent, and prints the one command that restores a backup. Restart your
+Claude Code session for new skills to register.
 
 ## Adding a skill
 
