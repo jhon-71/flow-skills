@@ -13,13 +13,18 @@ copied around and left to drift. Take it if it fits how you work; ignore it if i
 | skill | what it does |
 |-------|--------------|
 | **chat** | Talk / think out loud only — no writing. Ideas get parked as drafts. |
+| **worth** | Judge one candidate before it becomes work: do now / wait / don't / just make it noisy. |
 | **todo** | Converge the agreed direction into a checkable todolist (into TodoWrite). |
 | **do**   | Execute the todolist one item at a time. |
 | **next** | Recommend the single best next action from the current state (advise, don't execute). |
 
-`chat` figures out *what* and *why*; `todo` lists *the steps*; `do` gets them done;
-`next` points at what to reach for when you're unsure. `todo → do` share one list
-object, so nothing is re-derived.
+`chat` figures out *what* and *why*; `worth` decides *whether and when*; `todo` lists
+*the steps*; `do` gets them done; `next` points at what to reach for when you're unsure.
+`todo → do` share one list object, so nothing is re-derived.
+
+`worth` is optional and deliberately gated — it earns its four questions only on work
+that takes half a day or more, or that is hard to undo. Below that line its own answer is
+"just do it". It consumes what `chat` parks as drafts, and hands survivors to `todo`.
 
 ## Capability skills
 
