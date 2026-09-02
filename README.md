@@ -1,6 +1,6 @@
 # flow-skills — portable session skills
 
-Generic, cross-project [Claude Code](https://claude.com/claude-code) skills. The core is a
+Generic, cross-project AI coding-agent skills. The core is a
 disciplined working flow — **chat → todo → do** — plus a small set of **capability** skills
 that are generic enough to belong nowhere else.
 
@@ -67,19 +67,45 @@ Nothing in `install.sh` writes this for you — it's your `CLAUDE.md`, so it's y
 
 ```bash
 git clone https://github.com/jhon-71/flow-skills.git
-cd flow-skills && ./install.sh
+cd flow-skills
 ```
 
-`install.sh` symlinks every `skills/<name>/` into `~/.claude/skills/<name>` — symlinks
-rather than copies, so a later `git pull` updates every skill in place. It never destroys
-a name you already use: a link that already points here is left alone; a link pointing
-somewhere else is moved to `~/.claude/skills-backup/<name>.<timestamp>` before being
-replaced; a real directory or file is skipped untouched and reported. Backups live
-*outside* `~/.claude/skills` on purpose — anything under that directory containing a
-`SKILL.md` is itself a loadable skill, so a backup parked there would shadow the very name
-it was saving. The script exits non-zero when anything was skipped, so a partial install is
-visible rather than silent, and prints the one command that restores a backup. Restart your
-Claude Code session for new skills to register.
+Install for Claude Code:
+
+```bash
+./install.sh
+# or explicitly:
+./install.sh --target claude
+```
+
+Install for Codex:
+
+```bash
+./install.sh --target codex
+```
+
+Install for both:
+
+```bash
+./install.sh --target all
+```
+
+`install.sh` symlinks every `skills/<name>/` into the selected agent's skills directory:
+
+| target | install path | backup path |
+|--------|--------------|-------------|
+| `claude` | `~/.claude/skills/<name>` | `~/.claude/skills-backup/<name>.<timestamp>` |
+| `codex` | `~/.codex/skills/<name>` | `~/.codex/skills-backup/<name>.<timestamp>` |
+
+It uses symlinks rather than copies, so a later `git pull` updates every skill in place. It
+never destroys a name you already use: a link that already points here is left alone; a link
+pointing somewhere else is moved to the target-specific backup directory before being replaced;
+a real directory or file is skipped untouched and reported. Backups live *outside* the skills
+directory on purpose — anything under that directory containing a `SKILL.md` is itself a
+loadable skill, so a backup parked there would shadow the very name it was saving. The script
+exits non-zero when anything was skipped, so a partial install is visible rather than silent,
+and prints the one command that restores a backup. Restart your agent session for new skills
+to register.
 
 ## Adding a skill
 
@@ -95,7 +121,7 @@ git add skills/<name>/references     # commits as a symlink (mode 120000)
 ```
 
 `install.sh` symlinks only `skills/<name>/`, so a skill without this line can't reach
-`references/` once installed — the path resolves inside `~/.claude/skills/<name>/`, not
+`references/` once installed — the path resolves inside the installed skill directory, not
 back in the repo. The symlink keeps one canonical copy of each reference while making it
 reachable from both layouts. Verify by reading through the *installed* path, not the repo
-path — `cat ~/.claude/skills/<name>/references/task-standard.md`.
+path — for example, `cat ~/.codex/skills/<name>/references/task-standard.md`.
