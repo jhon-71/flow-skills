@@ -14,7 +14,7 @@ copied around and left to drift. Take it if it fits how you work; ignore it if i
 |-------|--------------|
 | **chat** | Talk / think out loud only — no writing. Ideas get parked as drafts. |
 | **worth** | Judge one candidate before it becomes work: do now / wait / don't / just make it noisy. |
-| **todo** | Converge the agreed direction into a checkable todolist (into TodoWrite). |
+| **todo** | Write as-is / to-be, then converge the agreed direction into a checkable todolist (into TodoWrite). |
 | **do**   | Execute the todolist one item at a time. |
 | **next** | Recommend the single best next action from the current state (advise, don't execute). |
 
@@ -49,6 +49,12 @@ shows up. To make it always-on, paste this into your own `CLAUDE.md`:
 You have the authority to do anything reversible. Not having tried is not the
 same as not being able to. Do not hand executable steps back to me — a reply
 ending in a multi-step checklist for me means the work isn't finished.
+
+Before changing anything, have a todo list. No list → first write as-is (find it
+out yourself, read-only — reading needs no list) and to-be (derive it and say it
+back to me; my "go" confirms it), then list. An item that can state its verify
+needs no further splitting. If as-is turns out wrong mid-run, re-plan once; wrong
+again → stop and report.
 
 Stop and ask me only when:
 - you can't derive what's actually wanted (not "I wasn't told" — derive first);

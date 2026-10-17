@@ -1,6 +1,6 @@
 ---
 name: todo
-description: The step between chat and do — converge the agreed direction into a checkable todolist (written into the session TodoWrite), handed to /do to complete one by one. Use when the user types /todo or says "make a todo / list it out / break it into tasks / turn this into a todolist". Lists only; does not execute.
+description: The step between chat and do — converge the agreed direction into a checkable todolist (written into the session TodoWrite), handed to /do to complete one by one. Use when the user types /todo or says "make a todo / list it out / break it into tasks / turn this into a todolist", or in Chinese 「列 todo / 列个清单 / 列 asis 和 tobe / 拆成任务」. Writes as-is / to-be first, then the list. Lists only; does not execute.
 ---
 
 # todo — converge the agreed direction into a todolist (the chat → **todo** → do gate)
@@ -30,6 +30,23 @@ todo is where every open question gets resolved, because **`/do` is meant to run
 (it may be dispatched async to a worker with nobody there to answer). So the list is not handed off
 until it is **clarified = zero open `❓`**. A leftover question in `do` means clarify wasn't finished
 here.
+
+### First: write down as-is and to-be
+
+The failure this gate exists for is the agent misreading the task and then doing the wrong thing
+well. So before breaking anything down, put two short lines at the top of the list:
+
+- **as-is** — what things look like now, as far as this task touches them. **Find it out yourself,
+  read-only.** Reading needs no todolist: if investigating required a list and the list required
+  investigating, nothing could ever start. Read-only exploration is the base case.
+- **to-be** — what things should look like when done. **Derive it and say it back** ("I read the
+  goal as X") — always, not only when unsure. The restated to-be is where a misreading surfaces
+  *before* any work; the user replying "go" (or not objecting) confirms it. Ask only when you
+  genuinely can't derive it — once, with options. Never hand back a bare "what's the goal?": against
+  a user who just said "do it", that ping-pongs forever.
+
+If the list may be dispatched async, the to-be must be confirmed **here** — nobody will be there
+to hear it restated later.
 
 **Anchor for "is this clear enough": the four-part task standard** — the `references/task-standard.md`
 file shipped in **this repo** (where this skill lives; portable and self-contained,
@@ -79,21 +96,23 @@ handling**, and **where the result lands / how you'll see it finished**.
 
 ## Steps
 
-1. **Align on the goal**: if /todo came with a specific instruction, that wins; otherwise take
-   **the direction just agreed in chat** as the input. If unsure where the chat landed or what's
-   wanted, restate your read of it in one line for confirmation (clarity precedes action) before
+1. **Align on the goal — as-is / to-be**: if /todo came with a specific instruction, that wins;
+   otherwise take **the direction just agreed in chat** as the input. Write down as-is
+   (investigated read-only) and to-be (restated to the user) as in *Clarify* above, before
    breaking it down.
 2. **Break into a todolist**: converge into an ordered, checkable action list. Granularity: one
    item = one step you can finish + verify independently; split ones too big, merge ones too tiny.
-   Each item carries an implicit "done when …" (spell out what needs verifying).
+   Each item carries an implicit "done when …" (spell out what needs verifying). **An item that
+   can state its verify is atomic — stop splitting it.** Otherwise each sub-item wants its own
+   sub-as-is and the breakdown never bottoms out.
 3. **Write into TodoWrite**: put the string into TodoWrite (the session todolist) so `/do` and
    you share one list and can check items off.
    > For big work / work handed to a worker, use a tracked task card (the four-section standard)
    > instead — that's a spec for someone else, not the lightweight /todo list.
 4. **Show the user**: surface the todolist so they can add/remove/edit/reorder; **don't end with
    "should I do it?"** — wait for their /do or "go".
-5. **Stamp do-ready**: the list is handed to `/do` only when **every `❓` is resolved and every
-   `🔒` is approved or dropped**. When both scans come back clean, say so in one line
+5. **Stamp do-ready**: the list is handed to `/do` only when **as-is / to-be are written (to-be
+   restated), every `❓` is resolved and every `🔒` is approved or dropped**. When both scans come back clean, say so in one line
    ("clarified · do-ready — no open questions, 🔒 approved") — that stamp is `/do`'s green light.
    If any `❓` or unapproved `🔒` remains, the list is **not** do-ready; surface them and settle
    them (or leave them explicitly parked) before `/do` runs.

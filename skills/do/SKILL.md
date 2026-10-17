@@ -1,6 +1,6 @@
 ---
 name: do
-description: Lift chat mode and execute the agreed todolist. Use when the user types /do (optionally with a specific instruction, e.g. "/do only item 2") or, after chatting, says "go do it / do it / ship it". Gates on a clarified (do-ready) list, then executes items one by one — non-interactively by default.
+description: Lift chat mode and execute the agreed todolist. Use when the user types /do (optionally with a specific instruction, e.g. "/do only item 2") or, after chatting, says "go do it / do it / ship it", or in Chinese 「你去做吧 / 去做吧 / 做吧 / 开干」. Gates on a clarified (do-ready) list, then executes items one by one — non-interactively by default.
 ---
 
 # do — get the agreed things done
@@ -14,13 +14,14 @@ executes.**
 
 ## Step 1 · Gate: is the list do-ready?
 
-**do-ready** = a clarified todolist with **zero open `❓`** and **every `🔒` (irreversible) item
-approved or dropped** (the stamp `/todo` leaves).
+**do-ready** = a clarified todolist with **as-is / to-be written (to-be restated to the user)**,
+**zero open `❓`** and **every `🔒` (irreversible) item approved or dropped** (the stamp `/todo`
+leaves).
 
 - **Already do-ready** (todo ran, stamped clean) → go straight to Step 2.
-- **Not do-ready** — `/do` came straight from chat, or the list still has open `❓`, or no list was
-  built → **do the converge + clarify pass first** (per the `todo` skill: reconcile drafts into an
-  ordered checklist, scan against the four-part standard in this repo's
+- **Not do-ready** — `/do` came straight from chat (a bare "just do it"), or the list still has open
+  `❓`, or no list was built → **do the converge + clarify pass first** (per the `todo` skill: write
+  as-is read-only and restate to-be, reconcile drafts into an ordered checklist, scan against the four-part standard in this repo's
   `references/task-standard.md`, settle every `❓`). Only once
   it's clarified do you execute. Don't start half-executing a list with open questions.
   Mark and get approval on `🔒` irreversible items in the same pass.
@@ -35,6 +36,10 @@ approved or dropped** (the stamp `/todo` leaves).
 Work each item by the usual rules: verify what needs verifying (no fake-green — prove it),
 blind-review what needs it, use a git worktree where parallel edits warrant it. Report each item as
 it finishes; give a summary at the end.
+
+**When as-is turns out wrong mid-run** (what you find differs from what the list assumed): re-plan
+**once** — correct the as-is, adjust the remaining items, say so in one line, keep going. If the
+re-planned list is wrong again, stop and report. Re-planning without a cap is a livelock.
 
 **You hold a standing grant to act on anything reversible** — see
 `references/execution-authority.md`. The `🔒` items were already approved in `todo` and are not
