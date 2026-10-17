@@ -113,6 +113,28 @@ exits non-zero when anything was skipped, so a partial install is visible rather
 and prints the one command that restores a backup. Restart your agent session for new skills
 to register.
 
+### Optional: the go-gate hook (`--hooks`)
+
+Whether "just do it" reaches the `do` skill is otherwise the model's call — it usually matches
+the trigger words, but nothing guarantees it. `--hooks` makes it deterministic for Claude Code:
+
+```bash
+./install.sh --hooks              # skills + hook
+./install.sh --target all --hooks # both agents' skills; hook for Claude Code only
+```
+
+It registers [`hooks/go-gate.sh`](hooks/go-gate.sh) as a `UserPromptSubmit` hook in
+`~/.claude/settings.json`. When your message contains a go-ahead (「你去做吧 / 做吧 / 开干」,
+"go do it / just do it / ship it", `/do`), the hook adds one line of context pointing the
+agent at the `do` gate (as-is / to-be first if no do-ready list exists). It never blocks or
+rewrites the message, and fails open (no `jq`, unreadable input → adds nothing). A false
+match costs one extra line of context, nothing more. `想法:` idea-inbox captures are excluded.
+
+Without `--hooks`, `settings.json` is never touched. With it, the hook is **appended** — hooks
+you already have stay — the previous file is kept as `settings.json.bak-<timestamp>`, re-runs
+are no-ops, and an invalid `settings.json` stops the install rather than being overwritten.
+Requires `jq`. Codex hooks are not wired yet; Codex gets the rule from `AGENTS.md`.
+
 ## Adding a skill
 
 Put it here only if it would help **any** AI session in **any** project (mesh-wide,
