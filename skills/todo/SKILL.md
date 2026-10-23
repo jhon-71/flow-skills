@@ -14,6 +14,9 @@ object (TodoWrite), not two separate copies.
 
 ## Contract (from this turn until /do takes over)
 
+Before writing the list, read [live todo timing](../../references/live-todo-timing.md).
+Each checklist item includes its duration estimate; `/do` updates the same entries with actuals.
+
 - **Converge only, no hands**: read context, break down steps, write the todolist;
   **no editing files, no touching the wiki, no creating task cards, no commits, no messages**.
 - **Output = a checkable todolist, written into TodoWrite** (not a prose plan) — each item a
