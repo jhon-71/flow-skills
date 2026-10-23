@@ -33,6 +33,10 @@ leaves).
 
 ## Step 2 · Execute one by one
 
+Read [live todo timing](../../references/live-todo-timing.md) before starting. Apply it when
+executing the list, reporting progress, and closing the task, including when `/do` creates a
+missing list through Step 1.
+
 Work each item by the usual rules: verify what needs verifying (no fake-green — prove it),
 blind-review what needs it, use a git worktree where parallel edits warrant it. Report each item as
 it finishes; give a summary at the end.
