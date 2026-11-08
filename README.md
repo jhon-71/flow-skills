@@ -33,6 +33,7 @@ public package rather than any one repo (so co-locating it with a repo would be 
 
 | skill | what it does |
 |-------|--------------|
+| **process-unburden** | Review why an existing process exists, question inherited assumptions, and propose verifiable ways to delete, combine, replace, or conditionally trigger steps. Analysis only by default. |
 | **webtest** | Black-box test a web front-end with a visible anti-detect browser: seed state to skip login, inject network faults over CDP (kill a domain / offline / throttle) without sudo, narrate on screen, screenshot the evidence. |
 
 ## The standing rule (recommended)
