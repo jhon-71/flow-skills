@@ -33,7 +33,7 @@ public package rather than any one repo (so co-locating it with a repo would be 
 
 | skill | what it does |
 |-------|--------------|
-| **webtest** | Black-box test a web front-end with a visible anti-detect browser: seed state to skip login, inject network faults over CDP (kill a domain / offline / throttle) without sudo, narrate on screen, screenshot the evidence. |
+| **webtest** | Black-box test a web front-end with a visible anti-detect browser: automate authorized login or reuse session state, inject network faults over CDP (kill a domain / offline / throttle) without sudo, narrate on screen, screenshot the evidence. |
 
 ## The standing rule (recommended)
 
