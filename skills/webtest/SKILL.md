@@ -1,6 +1,12 @@
 ---
 name: webtest
-description: Drive a **visible** anti-detect browser (Playwright + CloakBrowser) to black-box test a web front-end, including sites with bot detection that reject vanilla headless ("Login incorrect" / challenge). Core powers: skip login by seeding localStorage/storageState, inject network faults over CDP (kill one domain / connection-refused / offline / throttle) **without touching /etc/hosts or sudo**, single visible window with on-screen narration, screenshot evidence. TRIGGER when the user says "test this page/site with Playwright", "black-box test this front-end", "simulate the domain dying / offline / being blocked and see how the client reacts", "use the anti-detect browser", "test the failover / degraded / offline path", "click through it like a real user". DO NOT edit /etc/hosts or use sudo to kill a domain (use CDP instead); do not relaunch the browser per scenario (one window, toggle CDP); do not automate a password login (seed saved state instead); do not leave temp scripts in someone else's project (delete after).
+description: >-
+  Black-box test a web front-end with visible Playwright and CloakBrowser, including
+  sites with bot detection. Automate authorized login or reuse session state,
+  inject network faults through CDP, narrate on screen, and capture evidence.
+  Use when asked to test a page with Playwright, click through a site like a real
+  user, use the anti-detect browser, or test failover, degraded, offline, blocked
+  domain, connection-refused, or throttled behavior.
 ---
 
 # webtest — black-box web testing with Playwright + CloakBrowser
@@ -94,10 +100,17 @@ await cdp.send('Network.enable');
 - **Full offline:** `Network.emulateNetworkConditions {offline:true, latency:0, downloadThroughput:0, uploadThroughput:0}`.
 - **Slow network:** same call with latency/throughput numbers.
 
-## Seed state instead of logging in
-Most client logic reads `localStorage`. Seed it directly and skip login (this also
-avoids automating credential entry — see Rules). Warm the page first if a Service
-Worker / precache must exist:
+## Authenticate or reuse session state
+**Automated password login is allowed for an authorized target.** Use credentials
+the user supplied or explicitly authorized you to read, fill the login form, submit,
+and verify that the authenticated page actually loaded. Keep credentials out of
+logs, screenshots, and committed scripts. Ask for input when a required credential
+or verification step is unavailable; successful authentication does not authorize
+additional account or application changes.
+
+Reuse `storageState` when login is not under test and an authorized session exists.
+For client logic that reads `localStorage`, seed consistent state directly. Warm
+the page first if a Service Worker / precache must exist:
 ```js
 await page.goto('https://app.example.com/', { waitUntil: 'domcontentloaded' }); // installs SW, warms cache
 await page.evaluate(() => { localStorage.setItem('some_key', JSON.stringify({/* ... */})); });
@@ -141,10 +154,6 @@ window up ~15-20s at the end before closing.
   detection, so it must be pointed at your own property, or at a system you hold explicit
   permission to test. If the target isn't yours, stop and ask — that check comes before
   every other rule here.
-- **Never automate a password login** to authenticate — typing credentials into a
-  login form is off-limits even with a test account. Prefer `storageState` / seeded
-  `localStorage`; if a genuinely fresh login is required, have the human do the
-  password step.
 - **No sudo, no `/etc/hosts`** for network faults — CDP does it cleaner and scoped
   to the browser.
 - **Treat saved state as a credential.** `.auth/state.json` (and anything else holding
